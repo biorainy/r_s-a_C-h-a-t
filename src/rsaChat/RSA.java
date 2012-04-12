@@ -6,5 +6,5 @@ package rsaChat;
  * @version Apr. 12 2012
  */
 public class RSA {
-
+    //
 }
