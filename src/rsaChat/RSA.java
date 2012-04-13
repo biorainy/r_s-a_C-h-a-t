@@ -1,15 +1,19 @@
 package rsaChat;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 /**
  * @author Baichuan Li
  * @author Hui Jia
  * @version Apr. 12 2012
  */
+class RSA {
 
     public static int coprime(int x) {
 	Random rand = new Random();
 	int y = rand.nextInt();
-	while(GCD(x,y) != 1) {
+	while (GCD(x, y) != 1) {
 	    y = rand.nextInt();
 	}
 	return y;
@@ -20,16 +24,16 @@ package rsaChat;
 	int r;
 	int x = a;
 	int y = b;
-	while(y != 0) {
+	while (y != 0) {
 	    r = x % y;
 	    x = y;
 	    y = r;
 	}
-	return x;	
+	return x;
     }
 
-    //helper method for mod_inverse
-    private static ArrayList<Integer> extendedGCD(int a, int b){
+    // helper method for mod_inverse
+    private static ArrayList<Integer> extendedGCD(int a, int b) {
 	ArrayList<Integer> k = new ArrayList<Integer>();
 	ArrayList<Integer> j = new ArrayList<Integer>();
 	ArrayList<Integer> r = new ArrayList<Integer>();
@@ -44,35 +48,35 @@ package rsaChat;
 	j.add(a);
 	r.add(a);
 
-	if(a == b) {
+	if (a == b) {
 	    gcd = a;
 	    x.add(1);
 	    y.add(0);
-	}else {
-	   while(r.get(i) != 0) {
-	       q.add(k.get(i) / j.get(i));
-	       r.add(k.get(i) - q.get(i) * j.get(i));
-	       k.add(j.get(i));
-	       j.add(r.get(i+1));
-	       i++;
-	       gcd = j.get(i-1);
-	   }
-	   x.add(1);
-	   y.add(0);
-	   i--;
-	   
-	   while(i > 0) {
-	       y.add(x.get(m));
-	       x.add(y.get(m) - q.get(i-1) * x.get(m));
-	       i--;
-	       m++;
-//	       int x1 = x.get(m);
-//	       int y1 = y.get(m);
-	   }
-	   result.add(gcd);
-	   result.add(x.get(x.size()-1));
-	   result.add(y.get(y.size()-1));
-	   
+	} else {
+	    while (r.get(i) != 0) {
+		q.add(k.get(i) / j.get(i));
+		r.add(k.get(i) - q.get(i) * j.get(i));
+		k.add(j.get(i));
+		j.add(r.get(i + 1));
+		i++;
+		gcd = j.get(i - 1);
+	    }
+	    x.add(1);
+	    y.add(0);
+	    i--;
+
+	    while (i > 0) {
+		y.add(x.get(m));
+		x.add(y.get(m) - q.get(i - 1) * x.get(m));
+		i--;
+		m++;
+		// int x1 = x.get(m);
+		// int y1 = y.get(m);
+	    }
+	    result.add(gcd);
+	    result.add(x.get(x.size() - 1));
+	    result.add(y.get(y.size() - 1));
+
 	}
 	return result;
 
@@ -80,36 +84,37 @@ package rsaChat;
 
     public static int mod_inverse(int base, int m) {
 	int x = 0;
-	if(GCD(base,m) == 1) {
-	   x = extendedGCD(base,m).get(1); 
+	if (GCD(base, m) == 1) {
+	    x = extendedGCD(base, m).get(1);
 	}
 	return x % m;
 
     }
-    
-    //helper method for modulo
+
+    // helper method for modulo
     private static ArrayList<Integer> int2baseTwo(int x) {
 	int q = x;
 	int k = 0;
 	ArrayList<Integer> a = new ArrayList<Integer>();
-	while(q != 0) {
+	while (q != 0) {
 	    a.add(q % 2);
 	    q = q / 2;
 	    k++;
 	}
 	return a;
-	
+
     }
-    
+
     public static int modulo(int a, int b, int c) {
 	ArrayList<Integer> baseA = int2baseTwo(b);
 	int x = 1;
 	int power = a % c;
-	for(int i = 0; i < baseA.size(); i++) {
-	    if(baseA.get(i) == 1) x = (x * power) % c;
+	for (int i = 0; i < baseA.size(); i++) {
+	    if (baseA.get(i) == 1)
+		x = (x * power) % c;
 	    power = (power * power) % c;
 	}
 	return x;
-	
+
     }
 }
