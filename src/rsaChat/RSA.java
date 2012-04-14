@@ -95,8 +95,8 @@ class RSA {
     private static ArrayList<Integer> int2baseTwo(int x) {
 	int q = x;
 	int k = 0;
-	// what is the function of this k??? Seems to me it's not necessary at
-	// all???
+	// what is the function of this k? Seems to me it's not necessary at
+	// all?
 	ArrayList<Integer> a = new ArrayList<Integer>();
 	while (q != 0) {
 	    a.add(q % 2);
