@@ -11,14 +11,13 @@ import java.util.Scanner;
  * @version Apr. 12 2012
  */
 class RSA {
-    Scanner scan;
 
     public static void main(String[] args) {
 	new RSA().run();
     }
 
     private void run() {
-	scan = new Scanner(System.in);
+	Scanner scan = new Scanner(System.in);
 	System.out.println("Enter the nth prime and the mth prime to compute:");
 	int nth;
 	int mth;
@@ -59,68 +58,34 @@ class RSA {
 
 	BigInteger c = BigInteger.valueOf(nthPrime * mthPrime);
 	BigInteger m = BigInteger.valueOf((nthPrime - 1) * (mthPrime - 1));
-
-	BigInteger e = coprime(m);
-	BigInteger d = mod_inverse(e, m);
+	/*
+	int e = coprime(m);
+	int d = mod_inverse(e, m);
 	System.out.println(nth + "th prime = " + nthPrime + ", " + mth
 		+ "th prime = " + mthPrime + ", c = " + c + ", m = " + m
 		+ ", e = " + e + ", d = " + d + ", Public Key = (" + e + ", "
 		+ c + "), Private Key = (" + d + ", " + c + ")");
-
-	promptForEncrypt();
-	promptForDecrypt();
-    }
-
-    public void promptForEncrypt() {
-	System.out
-		.println("Please enter the public key (e, c): first e, then c");
-	BigInteger pubKey = scan.nextBigInteger();
-	BigInteger c_key = scan.nextBigInteger();
-	System.out.println("Please enter a sentence to encrypt");
-	String input = scan.next();
+	*/
+	String input = "Hello!";
 	for (int k = 0; k < input.length(); k++) {
-	    System.out.print(input.charAt(k) + " " + (int) input.charAt(k)
-		    + " encrypt to: ");
+	    System.out
+		    .println(input.charAt(k) + " is " + (int) input.charAt(k));
 	    BigInteger cipher = endecrypt(
-		    BigInteger.valueOf((long) input.charAt(k)), pubKey, c_key);
+		    BigInteger.valueOf((long) input.charAt(k)),
+		    BigInteger.valueOf(451), BigInteger.valueOf(2623));
 	    System.out.println(cipher);
 	}
     }
 
-    public void promptForDecrypt() {
-	System.out
-		.println("Please enter the private key (d, c): first d, then c");
-	BigInteger privateKey = scan.nextBigInteger();
-	BigInteger c_key = scan.nextBigInteger();
-	System.out
-		.println("Enter next char cipher value as an int, type quit to quit");
-
-	String input = scan.next();
-	while (!input.equals("quit")) {
-	    try {
-		BigInteger cipher = new BigInteger(input);
-		cipher = endecrypt(cipher, privateKey, c_key);
-		System.out.println((char) cipher.intValue() + " " + cipher);
-	    } catch (Exception e) {
-		System.out
-			.println("Input is not a valid int number. Program quit...");
-		return;
-	    }
-	    input = scan.next();
-
-	}
-
-    }
-
-    public static BigInteger coprime(BigInteger x) {
+    public static int coprime(int x) {
 	// I changed to method so the coprime number is restricted in the range
 	// (0, x), or it would return some negative numbers
 	Random rand = new Random();
-	int y = rand.nextInt(x.intValue());
-	while (GCD(x.intValue(), y) != 1) {
-	    y = rand.nextInt(x.intValue());
+	int y = rand.nextInt(x);
+	while (GCD(x, y) != 1) {
+	    y = rand.nextInt(x);
 	}
-	return BigInteger.valueOf(y);
+	return y;
 
     }
 
@@ -191,15 +156,15 @@ class RSA {
      * @param m
      * @return
      */
-    public static BigInteger mod_inverse(BigInteger base, BigInteger m) {
+    public static int mod_inverse(int base, int m) {
 	// Mod inverse is getting negative numbers? I think it's better to
 	// change it to positive number in the range of (0, m)?
 	int x = 0;
-	if (GCD(base.intValue(), m.intValue()) == 1) {
-	    x = extendedGCD(base.intValue(), m.intValue()).get(1);
+	if (GCD(base, m) == 1) {
+	    x = extendedGCD(base, m).get(1);
 	}
+	return x % m;
 
-	return BigInteger.valueOf(x % m.intValue());
     }
 
     // helper method for modulo
