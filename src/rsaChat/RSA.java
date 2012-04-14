@@ -95,6 +95,8 @@ class RSA {
     private static ArrayList<Integer> int2baseTwo(int x) {
 	int q = x;
 	int k = 0;
+	// what is the function of this k??? Seems to me it's not necessary at
+	// all???
 	ArrayList<Integer> a = new ArrayList<Integer>();
 	while (q != 0) {
 	    a.add(q % 2);
@@ -116,5 +118,37 @@ class RSA {
 	}
 	return x;
 
+    }
+
+    /**
+     * Computer Euler's Totient. Euler's totient or phi function is an
+     * arithmetic function that counts the number of positive integers less than
+     * or equal to n that are relatively prime to n.
+     * 
+     * @param n
+     *            The number n to be computed.
+     * @return The number of positive integers relatively prime to n.
+     */
+    int totient(int n) {
+	int count = 0;
+	for (int i = 1; i < n; i++) {
+	    if (GCD(i, n) == 1) {
+		count++;
+	    }
+	}
+	return count;
+    }
+
+    /**
+     * Given an integer representing an ASCII character value, encrypt it via
+     * the RSA crypto algorithm.
+     * 
+     * @param msg_or_cipher
+     * @param key
+     * @param c
+     * @return
+     */
+    int endecrypt(int msg_or_cipher, int key, int c) {
+	return 0;
     }
 }
