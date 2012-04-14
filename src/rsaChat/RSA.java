@@ -197,12 +197,16 @@ class RSA {
     public static BigInteger mod_inverse(BigInteger base, BigInteger m) {
 	// Mod inverse is getting negative numbers? I think it's better to
 	// change it to positive number in the range of (0, m)?
+	//changed this into positive number
 	int x = 0;
-	if (GCD(base.intValue(), m.intValue()) == 1) {
-	    x = extendedGCD(base.intValue(), m.intValue()).get(1);
+	int result = 0;
+	if(GCD(base,m) == 1) {
+	    x = extendedGCD(base,m).get(1); 
+	    if(x % m < 0) result = m + x % m;
+	    else result = x % m;
 	}
 
-	return BigInteger.valueOf(x % m.intValue());
+	return BigInteger.valueOf(result.intValue());
     }
 
     // helper method for modulo
