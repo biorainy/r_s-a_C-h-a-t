@@ -1,7 +1,9 @@
 package rsaChat;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  * @author Baichuan Li
@@ -10,11 +12,78 @@ import java.util.Random;
  */
 class RSA {
 
+    public static void main(String[] args) {
+	new RSA().run();
+    }
+
+    private void run() {
+	Scanner scan = new Scanner(System.in);
+	System.out.println("Enter the nth prime and the mth prime to compute:");
+	int nth;
+	int mth;
+	try {
+	    nth = scan.nextInt();
+	    mth = scan.nextInt();
+	} catch (Exception e) {
+	    System.out.println("Input not valid integers. Program quit....");
+	    return;
+	}
+	long nthPrime = 0;
+	long mthPrime = 0;
+	// already consider 2 as a prime, so count starts from 1
+	int primeCount = 0;
+	int i = 2;
+	// computer the nth and mth prime number
+	while (true) {
+	    boolean prime = true;
+	    for (int j = 2; j < i; j++) {
+		if (i % j == 0) {
+		    prime = false;
+		    break;
+		}
+	    }
+	    if (prime) {
+		primeCount++;
+		if (primeCount == nth) {
+		    nthPrime = i;
+		} else if (primeCount == mth) {
+		    mthPrime = i;
+		}
+	    }
+	    if (nthPrime != 0 && mthPrime != 0) {
+		break;
+	    }
+	    i++;
+	}
+
+	BigInteger c = BigInteger.valueOf(nthPrime * mthPrime);
+	BigInteger m = BigInteger.valueOf((nthPrime - 1) * (mthPrime - 1));
+	/*
+	int e = coprime(m);
+	int d = mod_inverse(e, m);
+	System.out.println(nth + "th prime = " + nthPrime + ", " + mth
+		+ "th prime = " + mthPrime + ", c = " + c + ", m = " + m
+		+ ", e = " + e + ", d = " + d + ", Public Key = (" + e + ", "
+		+ c + "), Private Key = (" + d + ", " + c + ")");
+	*/
+	String input = "Hello!";
+	for (int k = 0; k < input.length(); k++) {
+	    System.out
+		    .println(input.charAt(k) + " is " + (int) input.charAt(k));
+	    BigInteger cipher = endecrypt(
+		    BigInteger.valueOf((long) input.charAt(k)),
+		    BigInteger.valueOf(451), BigInteger.valueOf(2623));
+	    System.out.println(cipher);
+	}
+    }
+
     public static int coprime(int x) {
+	// I changed to method so the coprime number is restricted in the range
+	// (0, x), or it would return some negative numbers
 	Random rand = new Random();
-	int y = rand.nextInt();
+	int y = rand.nextInt(x);
 	while (GCD(x, y) != 1) {
-	    y = rand.nextInt();
+	    y = rand.nextInt(x);
 	}
 	return y;
 
@@ -82,7 +151,14 @@ class RSA {
 
     }
 
+    /**
+     * @param base
+     * @param m
+     * @return
+     */
     public static int mod_inverse(int base, int m) {
+	// Mod inverse is getting negative numbers? I think it's better to
+	// change it to positive number in the range of (0, m)?
 	int x = 0;
 	if (GCD(base, m) == 1) {
 	    x = extendedGCD(base, m).get(1);
@@ -148,7 +224,7 @@ class RSA {
      * @param c
      * @return
      */
-    int endecrypt(int msg_or_cipher, int key, int c) {
-	return 0;
+    BigInteger endecrypt(BigInteger msg_or_cipher, BigInteger key, BigInteger c) {
+	return msg_or_cipher.modPow(key, c);
     }
 }
