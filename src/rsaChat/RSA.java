@@ -200,8 +200,8 @@ class RSA {
 	//changed this into positive number
 	int x = 0;
 	int result = 0;
-	if(GCD(base,m) == 1) {
-	    x = extendedGCD(base,m).get(1); 
+	if (GCD(base.intValue(), m.intValue()) == 1) {	  	
+	    x = extendedGCD(base.intValue(), m.intValue()).get(1); 
 	    if(x % m < 0) result = m + x % m;
 	    else result = x % m;
 	}
