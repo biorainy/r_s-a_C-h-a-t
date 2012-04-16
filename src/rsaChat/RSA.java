@@ -80,8 +80,10 @@ class RSA {
 	BigInteger pubKey = scan.nextBigInteger();
 	BigInteger c_key = scan.nextBigInteger();
 	System.out.println("Please enter a sentence to encrypt");
-	String input = scan.next();
+	scan.nextLine();
+	String input = scan.nextLine();
 	for (int k = 0; k < input.length(); k++) {
+	    // System.out.println("Input length is:" + input.length());
 	    System.out.print(input.charAt(k) + " " + (int) input.charAt(k)
 		    + " encrypt to: ");
 	    BigInteger cipher = endecrypt(
