@@ -1,12 +1,15 @@
 package rsaChat;
 
+import java.io.BufferedReader;
 import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class Server {
-
+    BigInteger ourPubKey = BigInteger.valueOf(1839);
+    BigInteger ourCKey = BigInteger.valueOf(2419);
+    BigInteger ourPrivateKey = BigInteger.valueOf(1119);
     BigInteger pubKey;
     BigInteger cKey;
 
@@ -39,9 +42,23 @@ public class Server {
 		.println("Please enter the public key (e, c): first e, then c");
 	BigInteger pubKey = scan.nextBigInteger();
 	BigInteger cKey = scan.nextBigInteger();
-	listener.out.writeBytes("Public Key:" + "" + "\n");
+	listener.out.writeBytes("Public Key:" + pubKey + " C_Key is:" + cKey
+		+ " \n");
 	SendMsg send = new SendMsg(listener.out, pubKey, cKey);
 	send.start();
-	String s = listener.getRequest();
+	getRequest(listener.in);
+	// String s = listener.getRequest();
+    }
+
+    void getRequest(BufferedReader in) throws Exception {
+	String incomingMsg;
+	BigInteger cipher = null;
+	while ((incomingMsg = in.readLine()) != null) {
+	    cipher = new BigInteger(incomingMsg);
+	    System.out.println("Received Cipher is :" + cipher);
+	    BigInteger decrpted = RSA.endecrypt(cipher, ourPrivateKey, ourCKey);
+	    System.out.println((char) decrpted.intValue() + " " + decrpted);
+	}
+	return;
     }
 }

@@ -33,18 +33,18 @@ public class SendMsg extends Thread {
 		BigInteger cipher = RSA.endecrypt(
 			BigInteger.valueOf((long) msg.charAt(k)), pubKey, cKey);
 		System.out.println(cipher);
+		try {
+		    sendMsg(cipher);
+		} catch (Exception e) {
+		    // TODO Auto-generated catch block
+		    System.out.println("Error sending message!");
+		}
 	    }
 
-	    try {
-		sendRequest(msg);
-	    } catch (Exception e) {
-		// TODO Auto-generated catch block
-		System.out.println("Error sending message!");
-	    }
 	}
     }
 
-    public void sendRequest(String msg) throws Exception {
-	out.writeBytes(msg + "\n");
+    public void sendMsg(BigInteger cipher) throws Exception {
+	out.writeBytes(cipher + "\n");
     }
 }
