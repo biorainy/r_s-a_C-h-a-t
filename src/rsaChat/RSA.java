@@ -202,11 +202,11 @@ class RSA {
 	int result = 0;
 	if (GCD(base.intValue(), m.intValue()) == 1) {	  	
 	    x = extendedGCD(base.intValue(), m.intValue()).get(1); 
-	    if(x % m < 0) result = m + x % m;
-	    else result = x % m;
+	    if(x % m.intValue() < 0) result = m.intValue() + x % m.intValue();
+	    else result = x % m.intValue();
 	}
 
-	return BigInteger.valueOf(result.intValue());
+	return BigInteger.valueOf(result);
     }
 
     // helper method for modulo
