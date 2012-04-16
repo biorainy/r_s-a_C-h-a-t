@@ -1,10 +1,14 @@
 package rsaChat;
 
-import java.io.IOException;
+import java.math.BigInteger;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Server {
+
+    BigInteger pubKey;
+    BigInteger cKey;
 
     /**
      * JavaProgrammingForums.com
@@ -18,19 +22,26 @@ public class Server {
 	}
 
     }
-    
-    public void run() throws Exception{
+
+    public void run() throws Exception {
+	Scanner scan = new Scanner(System.in);
 	// Port to monitor
-		final int myPort = 1071;
-		ServerSocket serSock = new ServerSocket(myPort);
-		System.out.println("port " + myPort + " opened");
+	final int myPort = 1074;
+	ServerSocket serSock = new ServerSocket(myPort);
+	System.out.println("port " + myPort + " opened");
 
-		Socket sock = serSock.accept();
-		System.out.println("Someone has made socket connection");
+	Socket sock = serSock.accept();
+	System.out.println("Someone has made socket connection");
 
-		ListenFor client = new ListenFor(sock);
-		SendMsg send = new SendMsg(client.out);
-		send.start();
-		String s = client.getRequest();
+	ListenFor listener = new ListenFor(sock);
+
+	System.out
+		.println("Please enter the public key (e, c): first e, then c");
+	BigInteger pubKey = scan.nextBigInteger();
+	BigInteger cKey = scan.nextBigInteger();
+	listener.out.writeBytes("Public Key:" + "" + "\n");
+	SendMsg send = new SendMsg(listener.out, pubKey, cKey);
+	send.start();
+	String s = listener.getRequest();
     }
 }

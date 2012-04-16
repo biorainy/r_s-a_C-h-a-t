@@ -199,13 +199,15 @@ class RSA {
     public static BigInteger mod_inverse(BigInteger base, BigInteger m) {
 	// Mod inverse is getting negative numbers? I think it's better to
 	// change it to positive number in the range of (0, m)?
-	//changed this into positive number
+	// changed this into positive number
 	int x = 0;
 	int result = 0;
-	if (GCD(base.intValue(), m.intValue()) == 1) {	  	
-	    x = extendedGCD(base.intValue(), m.intValue()).get(1); 
-	    if(x % m.intValue() < 0) result = m.intValue() + x % m.intValue();
-	    else result = x % m.intValue();
+	if (GCD(base.intValue(), m.intValue()) == 1) {
+	    x = extendedGCD(base.intValue(), m.intValue()).get(1);
+	    if (x % m.intValue() < 0)
+		result = m.intValue() + x % m.intValue();
+	    else
+		result = x % m.intValue();
 	}
 
 	return BigInteger.valueOf(result);
@@ -268,7 +270,8 @@ class RSA {
      * @param c
      * @return
      */
-    BigInteger endecrypt(BigInteger msg_or_cipher, BigInteger key, BigInteger c) {
+    public static BigInteger endecrypt(BigInteger msg_or_cipher,
+	    BigInteger key, BigInteger c) {
 	return msg_or_cipher.modPow(key, c);
     }
 }
