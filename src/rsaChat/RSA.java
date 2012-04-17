@@ -14,6 +14,10 @@ class RSA {
     Scanner scan;
 
     public static void main(String[] args) {
+
+	long k = RSA.bruteDecrpt(1442270057, 145924174367l);
+	System.out.println("Found solution!" + k);
+
 	new RSA().run();
     }
 
@@ -32,12 +36,18 @@ class RSA {
 	long nthPrime = 0;
 	long mthPrime = 0;
 	// already consider 2 as a prime, so count starts from 1
-	int primeCount = 0;
-	int i = 2;
+	int primeCount = 1;
+	if (nth == 1) {
+	    nthPrime = 2;
+	}
+	if (mth == 1) {
+	    mthPrime = 2;
+	}
+	int i = 3;
 	// computer the nth and mth prime number
 	while (true) {
 	    boolean prime = true;
-	    for (int j = 2; j < i; j++) {
+	    for (int j = 2; j < Math.sqrt(i) + 1; j++) {
 		if (i % j == 0) {
 		    prime = false;
 		    break;
@@ -278,5 +288,58 @@ class RSA {
     public static BigInteger endecrypt(BigInteger msg_or_cipher,
 	    BigInteger key, BigInteger c) {
 	return msg_or_cipher.modPow(key, c);
+    }
+
+    /**
+     * Given public key and c_key, calculate and return the private key.
+     * 
+     * @param pubKey
+     * @param cKey
+     * @return Private Key.
+     */
+    public static long bruteDecrpt(long pubKey, long cKey) {
+	int i = 2;
+
+	while (true) {
+	    boolean prime = true;
+	    for (int j = 2; j < Math.sqrt(i) + 1; j++) {
+		if (i % j == 0) {
+		    prime = false;
+		    break;
+		}
+	    }
+
+	    if (prime) {
+		if ((cKey % i) == 0) {
+		    boolean found = true;
+		    for (int k = 2; k < Math.sqrt(i) + 1; k++) {
+			if (i % k == 0) {
+			    found = false;
+			    break;
+			}
+		    }
+		    if (found) {
+			long onePrime = i;
+			long anotherPrime = cKey / i;
+			long m = (onePrime - 1) * (anotherPrime - 1);
+			// BigInteger e = coprime(BigInteger.valueOf(m));
+			// System.out.println("one primer is:" + onePrime
+			// + " and another prime is:" + anotherPrime);
+			/*
+			while (e.longValue() != pubKey) {
+			    e = coprime(BigInteger.valueOf(m));
+			}
+			*/
+
+			BigInteger d = mod_inverse(BigInteger.valueOf(pubKey),
+				BigInteger.valueOf(m));
+			return d.longValue();
+
+		    }
+		}
+	    }
+
+	    i++;
+	}
     }
 }
