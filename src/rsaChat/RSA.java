@@ -72,6 +72,16 @@ class RSA {
     }
 
     /**
+     * Get the "index"th prime number.
+     * 
+     * @param index
+     * @return
+     */
+    public long getPrime(int index) {
+	return 0;
+    }
+
+    /**
      * Prompt the user for encrypt.
      */
     public void promptForEncrypt() {
@@ -105,7 +115,7 @@ class RSA {
 	    try {
 		BigInteger cipher = new BigInteger(input);
 		cipher = endecrypt(cipher, privateKey, c_key);
-		System.out.println((char) cipher.intValue() + " " + cipher);
+		System.out.println((char) cipher.longValue() + " " + cipher);
 	    } catch (Exception e) {
 		System.out
 			.println("Input is not a valid int number. Program quit...");
@@ -118,21 +128,20 @@ class RSA {
     }
 
     public static BigInteger coprime(BigInteger x) {
-	// I changed to method so the coprime number is restricted in the range
-	// (0, x), or it would return some negative numbers
+
 	Random rand = new Random();
-	int y = rand.nextInt();
-	while (GCD(x.intValue(), y) != 1) {
+	long y = rand.nextLong();
+	while (GCD(x.longValue(), y) != 1) {
 	    y = rand.nextInt();
 	}
 	return BigInteger.valueOf(y);
 
     }
 
-    public static int GCD(int a, int b) {
-	int r;
-	int x = a;
-	int y = b;
+    public static long GCD(long a, long b) {
+	long r;
+	long x = a;
+	long y = b;
 	while (y != 0) {
 	    r = x % y;
 	    x = y;
@@ -142,15 +151,15 @@ class RSA {
     }
 
     // helper method for mod_inverse
-    private static ArrayList<Integer> extendedGCD(int a, int b) {
-	ArrayList<Integer> k = new ArrayList<Integer>();
-	ArrayList<Integer> j = new ArrayList<Integer>();
-	ArrayList<Integer> r = new ArrayList<Integer>();
-	ArrayList<Integer> x = new ArrayList<Integer>();
-	ArrayList<Integer> y = new ArrayList<Integer>();
-	ArrayList<Integer> q = new ArrayList<Integer>();
-	ArrayList<Integer> result = new ArrayList<Integer>();
-	int gcd = 0;
+    private static ArrayList<Long> extendedGCD(long a, long b) {
+	ArrayList<Long> k = new ArrayList<Long>();
+	ArrayList<Long> j = new ArrayList<Long>();
+	ArrayList<Long> r = new ArrayList<Long>();
+	ArrayList<Long> x = new ArrayList<Long>();
+	ArrayList<Long> y = new ArrayList<Long>();
+	ArrayList<Long> q = new ArrayList<Long>();
+	ArrayList<Long> result = new ArrayList<Long>();
+	long gcd = 0;
 	int i = 0;
 	int m = 0;
 	k.add(b);
@@ -159,8 +168,8 @@ class RSA {
 
 	if (a == b) {
 	    gcd = a;
-	    x.add(1);
-	    y.add(0);
+	    x.add(1l);
+	    y.add(0l);
 	} else {
 	    while (r.get(i) != 0) {
 		q.add(k.get(i) / j.get(i));
@@ -170,8 +179,8 @@ class RSA {
 		i++;
 		gcd = j.get(i - 1);
 	    }
-	    x.add(1);
-	    y.add(0);
+	    x.add(1l);
+	    y.add(0l);
 	    i--;
 
 	    while (i > 0) {
@@ -179,8 +188,6 @@ class RSA {
 		x.add(y.get(m) - q.get(i - 1) * x.get(m));
 		i--;
 		m++;
-		// int x1 = x.get(m);
-		// int y1 = y.get(m);
 	    }
 	    result.add(gcd);
 	    result.add(x.get(x.size() - 1));
@@ -200,47 +207,45 @@ class RSA {
 	// Mod inverse is getting negative numbers? I think it's better to
 	// change it to positive number in the range of (0, m)?
 	// changed this into positive number
-	int x = 0;
-	int result = 0;
-	if (GCD(base.intValue(), m.intValue()) == 1) {
-	    x = extendedGCD(base.intValue(), m.intValue()).get(1);
-	    if (x % m.intValue() < 0)
-		result = m.intValue() + x % m.intValue();
-	    else
-		result = x % m.intValue();
+	long x = 0;
+	long result = 0;
+	if (GCD(base.longValue(), m.longValue()) == 1) {
+	    x = extendedGCD(base.longValue(), m.longValue()).get(1);
+
+	    result = x % m.longValue();
 	}
 
 	return BigInteger.valueOf(result);
     }
 
-    // helper method for modulo
-    private static ArrayList<Integer> int2baseTwo(int x) {
-	int q = x;
-	int k = 0;
-	// what is the function of this k? Seems to me it's not necessary at
-	// all?
-	ArrayList<Integer> a = new ArrayList<Integer>();
-	while (q != 0) {
-	    a.add(q % 2);
-	    q = q / 2;
-	    k++;
-	}
-	return a;
+    /*
+        // helper method for modulo
+        private static ArrayList<Integer> int2baseTwo(int x) {
+    	int q = x;
+    	// what is the function of this k? Seems to me it's not necessary at
+    	// all?
+    	ArrayList<Integer> a = new ArrayList<Integer>();
+    	while (q != 0) {
+    	    a.add(q % 2);
+    	    q = q / 2;
+    	}
+    	return a;
 
-    }
+        }
 
-    public static int modulo(int a, int b, int c) {
-	ArrayList<Integer> baseA = int2baseTwo(b);
-	int x = 1;
-	int power = a % c;
-	for (int i = 0; i < baseA.size(); i++) {
-	    if (baseA.get(i) == 1)
-		x = (x * power) % c;
-	    power = (power * power) % c;
-	}
-	return x;
+        public static int modulo(int a, int b, int c) {
+    	ArrayList<Integer> baseA = int2baseTwo(b);
+    	int x = 1;
+    	int power = a % c;
+    	for (int i = 0; i < baseA.size(); i++) {
+    	    if (baseA.get(i) == 1)
+    		x = (x * power) % c;
+    	    power = (power * power) % c;
+    	}
+    	return x;
 
-    }
+        }
+        */
 
     /**
      * Computer Euler's Totient. Euler's totient or phi function is an

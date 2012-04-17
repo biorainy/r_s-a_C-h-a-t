@@ -16,8 +16,8 @@ public class RSATest {
 
     @Test
     public void testCoprime() {
-	//since it is randomly generate number, it is hard to test
-	//so shall we delete this test?
+	// since it is randomly generate number, it is hard to test
+	// so shall we delete this test?
     }
 
     @Test
@@ -40,27 +40,17 @@ public class RSATest {
 	assertEquals(
 		RSA.mod_inverse(BigInteger.valueOf(3), BigInteger.valueOf(17)),
 		BigInteger.valueOf(6));
+	assertEquals(RSA.mod_inverse(BigInteger.valueOf(55),
+		BigInteger.valueOf(123)), BigInteger.valueOf(85));
+	assertEquals(RSA.mod_inverse(BigInteger.valueOf(45),
+		BigInteger.valueOf(223)), BigInteger.valueOf(114));
 	assertEquals(
-		RSA.mod_inverse(BigInteger.valueOf(55), BigInteger.valueOf(123)),
-		BigInteger.valueOf(85));
-	assertEquals(
-		RSA.mod_inverse(BigInteger.valueOf(45), BigInteger.valueOf(223)),
-		BigInteger.valueOf(114));
-	assertEquals(
-		RSA.mod_inverse(BigInteger.valueOf(2342), BigInteger.valueOf(92830457)),
+		RSA.mod_inverse(BigInteger.valueOf(2342),
+			BigInteger.valueOf(92830457)),
 		BigInteger.valueOf(75588250));
 	assertEquals(
 		RSA.mod_inverse(BigInteger.valueOf(3), BigInteger.valueOf(30)),
 		BigInteger.valueOf(0));
-    }
-
-    @Test
-    public void testModulo() {
-	assertEquals(RSA.modulo(2, 0, 55),1);
-	assertEquals(RSA.modulo(2, 4, 1000),16);
-	assertEquals(RSA.modulo(2, 6, 5),4);
-	assertEquals(RSA.modulo(89, 1232, 4623),1);
-	assertEquals(RSA.modulo(2349723, 423424, 12345),696);
     }
 
     @Test

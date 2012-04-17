@@ -70,7 +70,7 @@ public class Client {
 	while ((incomingMsg = in.readLine()) != null) {
 	    cipher = new BigInteger(incomingMsg);
 	    System.out.println("Received Cipher is :" + cipher);
-	    BigInteger decrpted = RSA.endecrypt(cipher, outPrivateKey, cKey);
+	    BigInteger decrpted = RSA.endecrypt(cipher, outPrivateKey, ourCKey);
 	    System.out.println((char) decrpted.intValue() + " " + decrpted);
 	}
 	return;
