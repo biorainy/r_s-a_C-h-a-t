@@ -14,16 +14,15 @@ public class Client {
     BigInteger cKey;
     BigInteger privateKey;
 
-    BigInteger ourPubKey = BigInteger.valueOf(1771102189);
-    BigInteger ourCKey = BigInteger.valueOf(136924607551l);
-    BigInteger outPrivateKey = BigInteger.valueOf(13346149);
+    BigInteger ourPubKey = BigInteger.valueOf(1442270057);
+    BigInteger ourCKey = BigInteger.valueOf(145924174367l);
+    BigInteger ourPrivateKey = BigInteger.valueOf(34553307521l);
 
     /**
      * JavaProgrammingForums.com
      */
     public static void main(String[] args) throws Exception {
 	new Client().run();
-
     }
 
     public void run() throws Exception {
@@ -61,6 +60,14 @@ public class Client {
 
 	SendMsg send = new SendMsg(out, pubKey, cKey);
 	send.start();
+
+	if (pubKey.equals(ourPubKey) && cKey.equals(ourCKey)) {
+	    privateKey = ourPrivateKey;
+	} else {
+	    privateKey = BigInteger.valueOf(RSA.bruteDecrpt(pubKey.longValue(),
+		    cKey.longValue()));
+	}
+
 	getRequest(in);
     }
 
@@ -69,9 +76,10 @@ public class Client {
 	BigInteger cipher = null;
 	while ((incomingMsg = in.readLine()) != null) {
 	    cipher = new BigInteger(incomingMsg);
-	    System.out.println("Received Cipher is :" + cipher);
-	    BigInteger decrpted = RSA.endecrypt(cipher, outPrivateKey, ourCKey);
-	    System.out.println((char) decrpted.intValue() + " " + decrpted);
+	    // System.out.println("Received Cipher is :" + cipher);
+	    BigInteger decrpted = RSA.endecrypt(cipher, privateKey, cKey);
+	    // System.out.println((char) decrpted.intValue() + " " + decrpted);
+	    System.out.print((char) decrpted.intValue());
 	}
 	return;
     }
