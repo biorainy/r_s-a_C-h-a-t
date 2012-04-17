@@ -121,9 +121,9 @@ class RSA {
 	// I changed to method so the coprime number is restricted in the range
 	// (0, x), or it would return some negative numbers
 	Random rand = new Random();
-	int y = rand.nextInt(x.intValue());
+	int y = rand.nextInt();
 	while (GCD(x.intValue(), y) != 1) {
-	    y = rand.nextInt(x.intValue());
+	    y = rand.nextInt();
 	}
 	return BigInteger.valueOf(y);
 

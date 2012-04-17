@@ -14,9 +14,9 @@ public class Client {
     BigInteger cKey;
     BigInteger privateKey;
 
-    BigInteger ourPubKey = BigInteger.valueOf(617870629l);
-    BigInteger ourCKey = BigInteger.valueOf(49331803679l);
-    BigInteger outPrivateKey = BigInteger.valueOf(1119);
+    BigInteger ourPubKey = BigInteger.valueOf(1771102189);
+    BigInteger ourCKey = BigInteger.valueOf(136924607551l);
+    BigInteger outPrivateKey = BigInteger.valueOf(13346149);
 
     /**
      * JavaProgrammingForums.com

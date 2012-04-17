@@ -7,9 +7,9 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Server {
-    BigInteger ourPubKey = BigInteger.valueOf(1839);
-    BigInteger ourCKey = BigInteger.valueOf(2419);
-    BigInteger ourPrivateKey = BigInteger.valueOf(1119);
+    BigInteger ourPubKey = BigInteger.valueOf(1771102189);
+    BigInteger ourCKey = BigInteger.valueOf(136924607551l);
+    BigInteger ourPrivateKey = BigInteger.valueOf(13346149);
     BigInteger pubKey;
     BigInteger cKey;
 
