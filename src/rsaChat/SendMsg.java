@@ -25,7 +25,7 @@ public class SendMsg extends Thread {
 	while (true) {
 	    // scan.nextLine();
 	    String msg = scan.nextLine();
-
+	    msg = msg + "\n";
 	    for (int k = 0; k < msg.length(); k++) {
 		// System.out.println("Input length is:" + input.length());
 		System.out.print(msg.charAt(k) + " " + (int) msg.charAt(k)
