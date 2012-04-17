@@ -7,10 +7,11 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Server {
-    BigInteger ourPubKey = BigInteger.valueOf(1771102189);
-    BigInteger ourCKey = BigInteger.valueOf(136924607551l);
-    BigInteger ourPrivateKey = BigInteger.valueOf(13346149);
+    BigInteger ourPubKey = BigInteger.valueOf(1442270057);
+    BigInteger ourCKey = BigInteger.valueOf(145924174367l);
+    BigInteger ourPrivateKey = BigInteger.valueOf(34553307521l);
     BigInteger pubKey;
+    BigInteger privateKey;
     BigInteger cKey;
 
     /**
@@ -40,11 +41,19 @@ public class Server {
 
 	System.out
 		.println("Please enter the public key (e, c): first e, then c");
-	BigInteger pubKey = scan.nextBigInteger();
-	BigInteger cKey = scan.nextBigInteger();
+	pubKey = scan.nextBigInteger();
+	cKey = scan.nextBigInteger();
 	listener.out.writeBytes("Public Key:" + pubKey + " C_Key is:" + cKey
 		+ " \n");
 	SendMsg send = new SendMsg(listener.out, pubKey, cKey);
+
+	if (pubKey.equals(ourPubKey) && cKey.equals(ourCKey)) {
+	    privateKey = ourPrivateKey;
+	} else {
+	    privateKey = BigInteger.valueOf(RSA.bruteDecrpt(pubKey.longValue(),
+		    cKey.longValue()));
+	}
+
 	send.start();
 	getRequest(listener.in);
 	// String s = listener.getRequest();
@@ -55,9 +64,10 @@ public class Server {
 	BigInteger cipher = null;
 	while ((incomingMsg = in.readLine()) != null) {
 	    cipher = new BigInteger(incomingMsg);
-	    System.out.println("Received Cipher is :" + cipher);
-	    BigInteger decrpted = RSA.endecrypt(cipher, ourPrivateKey, ourCKey);
-	    System.out.println((char) decrpted.intValue() + " " + decrpted);
+	    // System.out.println("Received Cipher is :" + cipher);
+	    BigInteger decrpted = RSA.endecrypt(cipher, privateKey, cKey);
+	    // System.out.println((char) decrpted.intValue() + " " + decrpted);
+	    System.out.print((char) decrpted.intValue());
 	}
 	return;
     }
