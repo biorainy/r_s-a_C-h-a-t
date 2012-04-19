@@ -22,17 +22,25 @@ public class SendMsg extends Thread {
 
     public void run() {
 	scan = new Scanner(System.in);
+
 	while (true) {
 	    // scan.nextLine();
 	    String msg = scan.nextLine();
 	    msg = msg + "\n";
 	    for (int k = 0; k < msg.length(); k++) {
-		// System.out.println("Input length is:" + input.length());
-		System.out.print(msg.charAt(k) + " " + (int) msg.charAt(k)
-			+ " encrypt to: ");
+		// unblock this comment block if you want to see what cipher
+		// text this character is encrypted to.
+
 		BigInteger cipher = RSA.endecrypt(
 			BigInteger.valueOf((long) msg.charAt(k)), pubKey, cKey);
+
+		/*		
+		System.out.print(msg.charAt(k) + " " + (int) msg.charAt(k)
+			+ " encrypt to: ");
+			
 		System.out.println(cipher);
+		*/
+
 		try {
 		    sendMsg(cipher);
 		} catch (Exception e) {

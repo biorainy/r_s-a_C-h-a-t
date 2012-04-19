@@ -49,16 +49,6 @@ public class Client {
 	BufferedReader in = new BufferedReader(new InputStreamReader(
 		csock.getInputStream()));
 
-	// asks the user to input public key pairs
-	System.out
-		.println("Please enter the public key (e, c): first e, then c");
-	try {
-	    pubKey = scan.nextBigInteger();
-	    cKey = scan.nextBigInteger();
-	} catch (Exception e) {
-	    System.out.println("Input not valid. Program quit....");
-	}
-	out.writeBytes("Public Key:" + pubKey + " C_Key is:" + cKey + " \n");
 	// SendMsg send = new SendMsg(out, pubKey, cKey);
 
 	// received partner's public key pair
@@ -83,6 +73,17 @@ public class Client {
 	    cKeyStart++;
 	}
 	receivedCKey = new BigInteger(cKeyStrBui.toString());
+
+	// asks the user to input public key pairs
+	System.out
+		.println("Please enter the public key (e, c): first e, then c");
+	try {
+	    pubKey = scan.nextBigInteger();
+	    cKey = scan.nextBigInteger();
+	} catch (Exception e) {
+	    System.out.println("Input not valid. Program quit....");
+	}
+	out.writeBytes("Public Key:" + pubKey + " C_Key is:" + cKey + " \n");
 
 	// ask for chat msg
 	System.out.println("Please enter message to send to the server: ");
