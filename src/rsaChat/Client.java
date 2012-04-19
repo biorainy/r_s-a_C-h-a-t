@@ -15,7 +15,7 @@ public class Client {
     BigInteger pubKey;
     BigInteger cKey;
     BigInteger privateKey;
-
+    SendMsg send;
     // these are used for encrypt
     BigInteger receivedPubKey;
     BigInteger receivedCKey;
@@ -44,6 +44,9 @@ public class Client {
 	} else {
 	    csock = new Socket(ipAddr, myPort);
 	}
+
+	System.out
+		.println("Connected to server. Waiting for the server to send public key pairs to me.");
 
 	DataOutputStream out = new DataOutputStream(csock.getOutputStream());
 	BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -88,7 +91,7 @@ public class Client {
 	// ask for chat msg
 	System.out.println("Please enter message to send to the server: ");
 
-	SendMsg send = new SendMsg(out, receivedPubKey, receivedCKey);
+	send = new SendMsg(out, receivedPubKey, receivedCKey);
 	send.start();
 
 	if (pubKey.equals(ourPubKey) && cKey.equals(ourCKey)) {
@@ -110,6 +113,10 @@ public class Client {
 	    BigInteger decrpted = RSA.endecrypt(cipher, privateKey, cKey);
 	    // System.out.println((char) decrpted.intValue() + " " + decrpted);
 	    System.out.print((char) decrpted.intValue());
+
+	    if (!send.isAlive()) {
+		System.exit(0);
+	    }
 	}
 	return;
     }

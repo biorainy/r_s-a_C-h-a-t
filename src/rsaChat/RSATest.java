@@ -5,14 +5,9 @@ import static org.junit.Assert.fail;
 
 import java.math.BigInteger;
 
-import org.junit.Before;
 import org.junit.Test;
 
 public class RSATest {
-
-    @Before
-    public void setUp() throws Exception {
-    }
 
     @Test
     public void testCoprime() {
