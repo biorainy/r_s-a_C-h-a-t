@@ -21,6 +21,9 @@ public class Server {
     BigInteger receivedPubKey;
     BigInteger receivedCKey;
 
+    Socket sock;
+    SendMsg send;
+
     /**
      * JavaProgrammingForums.com
      */
@@ -41,7 +44,7 @@ public class Server {
 	ServerSocket serSock = new ServerSocket(myPort);
 	System.out.println("port " + myPort + " opened");
 
-	Socket sock = serSock.accept();
+	sock = serSock.accept();
 	System.out.println("Someone has made socket connection");
 
 	ListenFor listener = new ListenFor(sock);
@@ -83,7 +86,7 @@ public class Server {
 	// ask for chat msg
 	System.out.println("Please enter message to send to the client: ");
 
-	SendMsg send = new SendMsg(listener.out, receivedPubKey, receivedCKey);
+	send = new SendMsg(listener.out, receivedPubKey, receivedCKey);
 
 	if (pubKey.equals(ourPubKey) && cKey.equals(ourCKey)) {
 	    privateKey = ourPrivateKey;
@@ -101,12 +104,14 @@ public class Server {
 	String incomingMsg;
 	BigInteger cipher = null;
 	while ((incomingMsg = in.readLine()) != null) {
+
 	    cipher = new BigInteger(incomingMsg);
 	    // System.out.println("Received Cipher is :" + cipher);
 	    BigInteger decrpted = RSA.endecrypt(cipher, privateKey, cKey);
 	    // System.out.println((char) decrpted.intValue() + " " + decrpted);
 	    System.out.print((char) decrpted.intValue());
 	}
+
 	return;
     }
 }

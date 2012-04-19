@@ -107,17 +107,15 @@ public class Client {
     void getRequest(BufferedReader in) throws Exception {
 	String incomingMsg;
 	BigInteger cipher = null;
-	while ((incomingMsg = in.readLine()) != null) {
+	while (send.isAlive() && (incomingMsg = in.readLine()) != null) {
 	    cipher = new BigInteger(incomingMsg);
 	    // System.out.println("Received Cipher is :" + cipher);
 	    BigInteger decrpted = RSA.endecrypt(cipher, privateKey, cKey);
 	    // System.out.println((char) decrpted.intValue() + " " + decrpted);
 	    System.out.print((char) decrpted.intValue());
 
-	    if (!send.isAlive()) {
-		System.exit(0);
-	    }
 	}
+	System.out.println("Quit chatting.");
 	return;
     }
 }

@@ -10,8 +10,6 @@ public class SendMsg extends Thread {
     DataOutputStream out;
     Scanner scan;
 
-    // boolean quit = false;
-
     /**
      * @param out
      */
@@ -28,10 +26,6 @@ public class SendMsg extends Thread {
 	while (true) {
 	    // scan.nextLine();
 	    String msg = scan.nextLine();
-
-	    if (msg.toLowerCase().equals(".bye")) {
-		System.exit(0);
-	    }
 
 	    msg = msg + "\n";
 	    for (int k = 0; k < msg.length(); k++) {
