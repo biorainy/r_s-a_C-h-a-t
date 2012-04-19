@@ -36,7 +36,6 @@ public class SendMsg extends Thread {
 		try {
 		    sendMsg(cipher);
 		} catch (Exception e) {
-		    // TODO Auto-generated catch block
 		    System.out.println("Error sending message!");
 		}
 	    }

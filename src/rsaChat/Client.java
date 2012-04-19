@@ -6,13 +6,19 @@ import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Client {
     // Port to monitor
     final int myPort = 1074;
+    // these are used for decrypt
     BigInteger pubKey;
     BigInteger cKey;
     BigInteger privateKey;
+
+    // these are used for encrypt
+    BigInteger receivedPubKey;
+    BigInteger receivedCKey;
 
     BigInteger ourPubKey = BigInteger.valueOf(1442270057);
     BigInteger ourCKey = BigInteger.valueOf(145924174367l);
@@ -26,16 +32,36 @@ public class Client {
     }
 
     public void run() throws Exception {
+	// connect to server by the IP address
+	System.out
+		.println("Please enter the IP address of the server you want to connect to, or \"localhost\" if you want to connect to local host:");
+	Scanner scan = new Scanner(System.in);
+	String ipAddr = scan.next();
 
-	// Client client = new Client();
-	InetAddress serverIPAddr = InetAddress.getLocalHost();
+	Socket csock;
+	if (ipAddr.equals("localhost")) {
+	    csock = new Socket(InetAddress.getLocalHost(), myPort);
+	} else {
+	    csock = new Socket(ipAddr, myPort);
+	}
 
-	Socket csock = new Socket(serverIPAddr, myPort);
 	DataOutputStream out = new DataOutputStream(csock.getOutputStream());
 	BufferedReader in = new BufferedReader(new InputStreamReader(
 		csock.getInputStream()));
-	System.out.println("Please enter message to send to the server: ");
 
+	// asks the user to input public key pairs
+	System.out
+		.println("Please enter the public key (e, c): first e, then c");
+	try {
+	    pubKey = scan.nextBigInteger();
+	    cKey = scan.nextBigInteger();
+	} catch (Exception e) {
+	    System.out.println("Input not valid. Program quit....");
+	}
+	out.writeBytes("Public Key:" + pubKey + " C_Key is:" + cKey + " \n");
+	// SendMsg send = new SendMsg(out, pubKey, cKey);
+
+	// received partner's public key pair
 	String keyInfo = in.readLine();
 	System.out.println(keyInfo);
 	int start = keyInfo.indexOf("Public Key:");
@@ -45,7 +71,7 @@ public class Client {
 	    pKey.append(keyInfo.charAt(pubKeyStart));
 	    pubKeyStart++;
 	}
-	pubKey = new BigInteger(pKey.toString());
+	receivedPubKey = new BigInteger(pKey.toString());
 
 	// System.out.println("Extracted pub key is:" + pubKey);
 
@@ -56,9 +82,12 @@ public class Client {
 	    cKeyStrBui.append(keyInfo.charAt(cKeyStart));
 	    cKeyStart++;
 	}
-	cKey = new BigInteger(cKeyStrBui.toString());
+	receivedCKey = new BigInteger(cKeyStrBui.toString());
 
-	SendMsg send = new SendMsg(out, pubKey, cKey);
+	// ask for chat msg
+	System.out.println("Please enter message to send to the server: ");
+
+	SendMsg send = new SendMsg(out, receivedPubKey, receivedCKey);
 	send.start();
 
 	if (pubKey.equals(ourPubKey) && cKey.equals(ourCKey)) {

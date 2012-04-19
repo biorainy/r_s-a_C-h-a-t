@@ -10,9 +10,16 @@ public class Server {
     BigInteger ourPubKey = BigInteger.valueOf(1442270057);
     BigInteger ourCKey = BigInteger.valueOf(145924174367l);
     BigInteger ourPrivateKey = BigInteger.valueOf(34553307521l);
+
+    // the user input pubKey and cKey, privateKey is got by brute force
+    // decrption if different from our own pubkey pair
     BigInteger pubKey;
     BigInteger privateKey;
     BigInteger cKey;
+
+    // received pubkey pair from partner
+    BigInteger receivedPubKey;
+    BigInteger receivedCKey;
 
     /**
      * JavaProgrammingForums.com
@@ -30,7 +37,7 @@ public class Server {
     public void run() throws Exception {
 	Scanner scan = new Scanner(System.in);
 	// Port to monitor
-	final int myPort = 1074;
+	final int myPort = 8811;
 	ServerSocket serSock = new ServerSocket(myPort);
 	System.out.println("port " + myPort + " opened");
 
@@ -41,11 +48,42 @@ public class Server {
 
 	System.out
 		.println("Please enter the public key (e, c): first e, then c");
-	pubKey = scan.nextBigInteger();
-	cKey = scan.nextBigInteger();
+	try {
+	    pubKey = scan.nextBigInteger();
+	    cKey = scan.nextBigInteger();
+	} catch (Exception e) {
+	    System.out.println("Input not valid. Program quit....");
+	}
 	listener.out.writeBytes("Public Key:" + pubKey + " C_Key is:" + cKey
 		+ " \n");
-	SendMsg send = new SendMsg(listener.out, pubKey, cKey);
+
+	// receive pubkey pair from partner
+	String keyInfo = listener.in.readLine();
+	System.out.println(keyInfo);
+	int start = keyInfo.indexOf("Public Key:");
+	StringBuilder pKey = new StringBuilder();
+	int pubKeyStart = start + "Public Key:".length();
+	while (keyInfo.charAt(pubKeyStart) != ' ') {
+	    pKey.append(keyInfo.charAt(pubKeyStart));
+	    pubKeyStart++;
+	}
+	receivedPubKey = new BigInteger(pKey.toString());
+
+	// System.out.println("Extracted pub key is:" + pubKey);
+
+	int startCK = keyInfo.indexOf("C_Key is:");
+	StringBuilder cKeyStrBui = new StringBuilder();
+	int cKeyStart = startCK + "C_Key is:".length();
+	while (keyInfo.charAt(cKeyStart) != ' ') {
+	    cKeyStrBui.append(keyInfo.charAt(cKeyStart));
+	    cKeyStart++;
+	}
+	receivedCKey = new BigInteger(cKeyStrBui.toString());
+
+	// ask for chat msg
+	System.out.println("Please enter message to send to the client: ");
+
+	SendMsg send = new SendMsg(listener.out, receivedPubKey, receivedCKey);
 
 	if (pubKey.equals(ourPubKey) && cKey.equals(ourCKey)) {
 	    privateKey = ourPrivateKey;
