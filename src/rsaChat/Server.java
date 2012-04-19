@@ -7,9 +7,9 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Server {
-    BigInteger ourPubKey = BigInteger.valueOf(1442270057);
-    BigInteger ourCKey = BigInteger.valueOf(145924174367l);
-    BigInteger ourPrivateKey = BigInteger.valueOf(34553307521l);
+    BigInteger ourPubKey = BigInteger.valueOf(816999931);
+    BigInteger ourCKey = BigInteger.valueOf(334016195633l);
+    BigInteger ourPrivateKey = BigInteger.valueOf(-12746183801l);
 
     // the user input pubKey and cKey, privateKey is got by brute force
     // decrption if different from our own pubkey pair

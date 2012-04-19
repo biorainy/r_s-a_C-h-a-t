@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Client {
     // Port to monitor
-    final int myPort = 1074;
+    final int myPort = 8811;
     // these are used for decrypt
     BigInteger pubKey;
     BigInteger cKey;

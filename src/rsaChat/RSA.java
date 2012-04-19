@@ -15,8 +15,8 @@ class RSA {
 
     public static void main(String[] args) {
 
-	long k = RSA.bruteDecrpt(1442270057, 145924174367l);
-	System.out.println("Found solution!" + k);
+	// long k = RSA.bruteDecrpt(1442270057, 145924174367l);
+	// System.out.println("Found solution!" + k);
 
 	new RSA().run();
     }
