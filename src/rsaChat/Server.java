@@ -21,9 +21,6 @@ public class Server {
     BigInteger receivedPubKey;
     BigInteger receivedCKey;
 
-    Socket sock;
-    SendMsg send;
-
     /**
      * JavaProgrammingForums.com
      */
@@ -44,7 +41,7 @@ public class Server {
 	ServerSocket serSock = new ServerSocket(myPort);
 	System.out.println("port " + myPort + " opened");
 
-	sock = serSock.accept();
+	Socket sock = serSock.accept();
 	System.out.println("Someone has made socket connection");
 
 	ListenFor listener = new ListenFor(sock);
@@ -86,7 +83,7 @@ public class Server {
 	// ask for chat msg
 	System.out.println("Please enter message to send to the client: ");
 
-	send = new SendMsg(listener.out, receivedPubKey, receivedCKey);
+	SendMsg send = new SendMsg(listener.out, receivedPubKey, receivedCKey);
 
 	if (pubKey.equals(ourPubKey) && cKey.equals(ourCKey)) {
 	    privateKey = ourPrivateKey;
@@ -96,22 +93,51 @@ public class Server {
 	}
 
 	send.start();
-	getRequest(listener.in);
+	if(ifQuit == false) getRequest(listener.in);
+	else System.exit(0);
 	// String s = listener.getRequest();
     }
-
+    
+	String quit = "";
+	int count = 0;
+	boolean ifQuit = false;
+	boolean startCount = false;
     void getRequest(BufferedReader in) throws Exception {
 	String incomingMsg;
 	BigInteger cipher = null;
-	while ((incomingMsg = in.readLine()) != null) {
 
+
+
+	while (ifQuit == false && (incomingMsg = in.readLine()) != null) {
 	    cipher = new BigInteger(incomingMsg);
 	    // System.out.println("Received Cipher is :" + cipher);
 	    BigInteger decrpted = RSA.endecrypt(cipher, privateKey, cKey);
 	    // System.out.println((char) decrpted.intValue() + " " + decrpted);
 	    System.out.print((char) decrpted.intValue());
+	    
+	    if((((char) decrpted.intValue())+"").equals(".") ) {
+//		System.out.println("heyhj");
+		startCount = true;
+	    }
+	    if(startCount == true) {
+		quit += (char) decrpted.intValue();
+		count++;
+	    }
+	    if(count == 4) {
+		if(quit.equals(".bye")) {
+		    System.out.println("\nClient is quiting...");
+		    ifQuit = true;
+		    System.exit(0);
+		}
+		else {
+		    quit = "";
+		    count = 0;
+		    startCount = false;
+		}
+	    }
+	    
+	    
 	}
-
 	return;
     }
 }
