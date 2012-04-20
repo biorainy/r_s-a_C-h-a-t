@@ -15,7 +15,7 @@ public class Client {
     BigInteger pubKey;
     BigInteger cKey;
     BigInteger privateKey;
-    SendMsg send;
+
     // these are used for encrypt
     BigInteger receivedPubKey;
     BigInteger receivedCKey;
@@ -44,9 +44,6 @@ public class Client {
 	} else {
 	    csock = new Socket(ipAddr, myPort);
 	}
-
-	System.out
-		.println("Connected to server. Waiting for the server to send public key pairs to me.");
 
 	DataOutputStream out = new DataOutputStream(csock.getOutputStream());
 	BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -91,7 +88,7 @@ public class Client {
 	// ask for chat msg
 	System.out.println("Please enter message to send to the server: ");
 
-	send = new SendMsg(out, receivedPubKey, receivedCKey);
+	SendMsg send = new SendMsg(out, receivedPubKey, receivedCKey);
 	send.start();
 
 	if (pubKey.equals(ourPubKey) && cKey.equals(ourCKey)) {
@@ -104,18 +101,41 @@ public class Client {
 	getRequest(in);
     }
 
+	String quit = "";
+	int count = 0;
+	boolean ifQuit = false;
+	boolean startCount = false;
     void getRequest(BufferedReader in) throws Exception {
 	String incomingMsg;
 	BigInteger cipher = null;
-	while (send.isAlive() && (incomingMsg = in.readLine()) != null) {
+	while (ifQuit == false && (incomingMsg = in.readLine()) != null) {
 	    cipher = new BigInteger(incomingMsg);
 	    // System.out.println("Received Cipher is :" + cipher);
 	    BigInteger decrpted = RSA.endecrypt(cipher, privateKey, cKey);
 	    // System.out.println((char) decrpted.intValue() + " " + decrpted);
 	    System.out.print((char) decrpted.intValue());
-
+	    
+	    if((((char) decrpted.intValue())+"").equals(".") ) {
+//		System.out.println("heyhj");
+		startCount = true;
+	    }
+	    if(startCount == true) {
+		quit += (char) decrpted.intValue();
+		count++;
+	    }
+	    if(count == 4) {
+		if(quit.equals(".bye")) {
+		    System.out.println("\nServer is quiting...");
+		    ifQuit = true;
+		    System.exit(0);
+		}
+		else {
+		    quit = "";
+		    count = 0;
+		    startCount = false;
+		}
+	    }
 	}
-	System.out.println("Quit chatting.");
 	return;
     }
 }
