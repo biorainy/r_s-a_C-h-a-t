@@ -26,7 +26,9 @@ public class SendMsg extends Thread {
 	while (true) {
 	    // scan.nextLine();
 	    String msg = scan.nextLine();
-
+	    
+	    
+	    
 	    msg = msg + "\n";
 	    for (int k = 0; k < msg.length(); k++) {
 		// unblock this comment block if you want to see what cipher
@@ -44,9 +46,15 @@ public class SendMsg extends Thread {
 
 		try {
 		    sendMsg(cipher);
+		    
+		    
 		} catch (Exception e) {
 		    System.out.println("Error sending message!");
 		}
+	    }
+	    if(msg.indexOf(".bye") != -1) {
+		System.out.println("I am quiting...");
+		System.exit(0);
 	    }
 
 	}
